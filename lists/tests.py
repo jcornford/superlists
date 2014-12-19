@@ -1,12 +1,15 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 from lists.views import home_page
-# Create your tests here.
+# Create your tests here. These are unit tests
 
 # the tests are run by invoking the Django test runner - a manage.py command.
 # $ python3 manage.py test 
+
+# these tests shoud be about testing logic, flow control, and configuration. Not really `HTML contstants...
 
 class HomePageTest(TestCase):
 
@@ -18,7 +21,6 @@ class HomePageTest(TestCase):
 		request = HttpRequest()
 		response = home_page(request)
 		# check the response we send from home_page in lists.views starts witg an html tag that is closed
-		self.assertTrue(response.content.startswith(b'<html>')) # b is for bytes, have to use to compare
-		# check we have a title tag with the words to do in it
-		self.assertIn(b'<title>To-Do lists</title>', response.content)
-		self.assertTrue(response.content.endswith(b'</html>'))
+		expected_html = render_to_string('home.html')
+		self.assertEqual(response.content.decode(), expected_html)
+		#use decode() to convert the respinse.content bytes int a python unicode string.
