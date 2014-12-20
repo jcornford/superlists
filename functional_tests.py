@@ -34,15 +34,18 @@ class NewVisitorTest(unittest.TestCase):
 
 		table = self.browser.find_element_by_id('id_list_table')
 		rows = table.find_elements_by_tag_name('tr')
-		self.assertTrue(
-			any(row.text == '1.: Buy slippers' for row in rows),
-			"New to-do item did not appear in table"
-			)
+		self.assertIn('1: Buy slippers', [row.text for row in rows])
 
 		#still a text box inviting her to add a another item
-		self.fail('Finish the functional fucking test!')
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys('Put on slippers')
+		inputbox.send_keys(Keys.ENTER)
 
 		#page udates and npw shows both items
+		table = self.browser.find_element_by_id('id_list_table')
+		rows = table.find_elements_by_tag_name('tr')
+		self.assertIn('1: Buy slippers', [row.text for row in rows])
+		self.assertIn('2: Put on slippers', [row.text for row in rows])
 
 		#user wonders whether the page will remeber her list, she then sees that the 
 		#site has generated a unqiue earl for her -- there is some text
@@ -50,6 +53,13 @@ class NewVisitorTest(unittest.TestCase):
 		#she visits that url, her to do list is still there
 
 		#she fucks off
+
+		self.fail('Finish the functional fucking test!')
+
+
+		
+
+		
 
 if __name__ =='__main__':
 	#call unittest.main(), which launches the unittest test runner, which finds test
