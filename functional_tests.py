@@ -15,7 +15,7 @@ class NewVisitorTest(unittest.TestCase):
 		rows  = table.find_elements_by_tag_name('tr')
 		self.assertIn(row_text, [row.text for row in rows])
 
-	
+
 
 	def test_can_start_a_list_and_retrieve_it_later(self):
 		#User checks out the webpage
@@ -35,11 +35,14 @@ class NewVisitorTest(unittest.TestCase):
 
 		#she types buy slippers
 		inputbox.send_keys('Buy slippers')
+   
 
 		#she hits enter, the page updates, and now page lists buy peakcock feathers
 		inputbox.send_keys(Keys.ENTER)
 
 		self.check_for_row_in_list_table('1: Buy slippers')
+
+		
 		#still a text box inviting her to add a another item
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		inputbox.send_keys('Put on slippers')
@@ -55,6 +58,8 @@ class NewVisitorTest(unittest.TestCase):
 		#she visits that url, her to do list is still there
 
 		#she fucks off
+
+
 
 		self.fail('Finish the functional fucking test!')
 

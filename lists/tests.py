@@ -36,6 +36,11 @@ class ItemModelTest(TestCase):
 
 class HomePageTest(TestCase):
 
+	def test_home_page_only_saves_items_when_necessary(self):
+		request = HttpRequest()
+		home_page(request) # this is not sending a POST method to views.home_page, so should not save anything
+		self.assertEqual(Item.objects.count(),0)
+
 	def test_root_url_resolves_to_home_page_view(self):
 		found = resolve('/')
 		self.assertEqual(found.func, home_page)
@@ -57,7 +62,12 @@ class HomePageTest(TestCase):
 		# exercise 
 		response = home_page(request)
 
-		# assert 
+		#assert
+		# to check that view saves a new item, not just passing it through to its response
+		self.assertEqual(Item.objects.count(),1)
+		new_item = Item.objects.first() # this is the same as objects.all()[0]
+		self.assertEqual(new_item.text,'A new list item')
+
 		self.assertIn('A new list item', response.content.decode())
 		expected_html = render_to_string(
 			'home.html',
