@@ -6,7 +6,8 @@ from django.template.loader import render_to_string
 from lists.views import home_page
 
 from lists.models import Item
-# Create your tests here. These are unit tests
+# Create your tests here. These are unit tests. Only have one thing for unit tests, 
+# i.e. each unit test has one assert block?
 
 # the tests are run by invoking the Django test runner - a manage.py command.
 # $ python3 manage.py test 
@@ -35,6 +36,18 @@ class ItemModelTest(TestCase):
 
 
 class HomePageTest(TestCase):
+
+	def test_home_page_displays_all_list_items(self):
+		Item.objects.create(text = 'itemey 1') # Item has been imported as a class?
+		Item.objects.create(text = 'itemey 2')
+
+		request = HttpRequest()
+		response = home_page(request)
+
+		self.assertIn('itemey 1', response.content.decode())
+		self.assertIn('itemey 2', response.content.decode())
+
+
 
 	def test_home_page_only_saves_items_when_necessary(self):
 		request = HttpRequest()
@@ -67,10 +80,24 @@ class HomePageTest(TestCase):
 		self.assertEqual(Item.objects.count(),1)
 		new_item = Item.objects.first() # this is the same as objects.all()[0]
 		self.assertEqual(new_item.text,'A new list item')
+	def test_home_page_redirects_after_POST_request(self):
+
+		request = HttpRequest()
+		request.method = 'POST'
+		request.POST['item_text'] = 'A new list item'
+
+		response = home_page(request)
+
+		# check for redirection after first post request. 
+		self.assertEqual(response.status_code, 302, "check for redirection after POST failed: 302 is redirect status code") # reidrect has status code 302
+		self.assertEqual(response['location'],'/')
+
+		'''
 
 		self.assertIn('A new list item', response.content.decode())
 		expected_html = render_to_string(
 			'home.html',
 			{'new_item_text': 'A new list item'})
 		self.assertEqual(response.content.decode(),expected_html)
+		'''
 		
