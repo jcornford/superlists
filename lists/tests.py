@@ -102,11 +102,6 @@ class HomePageTest(TestCase):
 	# as it now is only going to contain an empty box, no longer needed. 
 	# class ListViewTest now does this
 
-	def test_home_page_only_saves_items_when_necessary(self):
-		request = HttpRequest()
-		home_page(request) # this is not sending a POST method to views.home_page, so should not save anything
-		self.assertEqual(Item.objects.count(),0)
-
 	def test_root_url_resolves_to_home_page_view(self):
 		found = resolve('/')
 		self.assertEqual(found.func, home_page)
