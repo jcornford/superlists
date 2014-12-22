@@ -40,7 +40,7 @@ class NewListTest(TestCase):
 		self.assertEqual(new_item.text,'A new list item')
 		'''
 	def test_redirects_after_POST_request(self):
-		self.client.post(
+		response = self.client.post(
 			'lists/new',
 			data = {'item_text':'A new list item'}
 			)

@@ -16,3 +16,6 @@ def view_list(request):
 	items = Item.objects.all() # used so can be added to the return render
 	return render(request, 'list.html', {'items':items})
 
+def new_list(request):
+	pass
+
