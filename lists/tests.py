@@ -15,6 +15,10 @@ from lists.models import Item
 # these tests shoud be about testing logic, flow control, and configuration. Not really `HTML contstants...
 
 class ListViewTest(TestCase):
+	def test_uses_list_template(self): # as opposed to home template we have been using till now
+		response = self.client.get('/lists/the-only-list-in-the-world/')
+		self.assertTemplateUsed(response,'list.html') # more django testing method magic!
+
 	def test_displays_all_items(self):
 		Item.objects.create(text = 'itemey 1')
 		Item.objects.create(text = 'itemey 2')
@@ -23,6 +27,7 @@ class ListViewTest(TestCase):
 
 		self.assertContains(response,'itemey 1')# the Django assertContains method knows how to deal with responses and the bytes of their content.
 		self.assertContains(response,'itemey 2')
+
 
 class ItemModelTest(TestCase):
 	def test_saving_and_retrieving_items(self):
@@ -46,15 +51,9 @@ class ItemModelTest(TestCase):
 
 class HomePageTest(TestCase):
 
-	def test_home_page_displays_all_list_items(self):
-		Item.objects.create(text = 'itemey 1') # Item has been imported as a class?
-		Item.objects.create(text = 'itemey 2')
-
-		request = HttpRequest()
-		response = home_page(request)
-
-		self.assertIn('itemey 1', response.content.decode())
-		self.assertIn('itemey 2', response.content.decode())
+	# this used to have a test for checking that it displayed all the items, but
+	# as it now is only going to contain an empty box, no longer needed. 
+	# class ListViewTest now does this
 
 	def test_home_page_only_saves_items_when_necessary(self):
 		request = HttpRequest()
