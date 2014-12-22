@@ -5,7 +5,8 @@ from lists.models import Item, List
 
 # Create your views here.
 def add_item(request,list_id):
-	pass
+	list_ = List.objects.get(id=list_id)
+	return redirect('/lists/%d/' %(list_.id,))
 
 def home_page(request):
 	return render(request, 'home.html')
