@@ -17,7 +17,7 @@ class NewListTest(TestCase):
 	def test_saving_a_POST_request(self):
 		
 		self.client.post(
-			'lists/new', # no trailing slash for some reason
+			'/lists/new', # no trailing slash for some reason
 			data = {'item_text':'A new list item'}
 			)
 		self.assertEqual(Item.objects.count(),1)
@@ -41,11 +41,10 @@ class NewListTest(TestCase):
 		'''
 	def test_redirects_after_POST_request(self):
 		response = self.client.post(
-			'lists/new',
+			'/lists/new',
 			data = {'item_text':'A new list item'}
 			)
-		self.assertEqual(response.status_code, 302, "check for redirection after POST failed: 302 is redirect status code") # reidrect has status code 302
-		self.assertEqual(response['location'],'/lists/the-only-list-in-the-world/')
+		self.assertRedirects(response, '/lists/the-only-list-in-the-world/')
 
 
 		''' without using django tst client
