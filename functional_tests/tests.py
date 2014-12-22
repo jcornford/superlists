@@ -1,8 +1,10 @@
-# Functional tests
+#Fundsdsctional tests
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
 from django.test import LiveServerTestCase
+
+
 
 class NewVisitorTest(LiveServerTestCase):
 	def setUp(self):
