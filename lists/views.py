@@ -4,6 +4,9 @@ from django.http import HttpResponse
 from lists.models import Item, List
 
 # Create your views here.
+def add_item(request,list_id):
+	pass
+
 def home_page(request):
 	return render(request, 'home.html')
 

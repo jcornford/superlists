@@ -1,16 +1,19 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-urlpatterns = patterns('',
+
+	#BEWARE GREEDY REGULAR EXPRESSIONS AND 301 error: permemant redirect. Almost right, except for missing /
+	# fixed with \d in regualr expression to select only for numerical digits.
 	# the r is a regular expression that defines which urls it applies to
     # goes on to say where it should send those requests
     # Examples:
     # ^$ means empty string
-    url(r'^$', 'lists.views.home_page', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
-    # to 
-    url(r'^lists/(.+)/$','lists.views.view_list', name='view_list'),
-    url(r'^lists/new$','lists.views.new_list', name='new_list'),
-    #url(r'^admin/', include(admin.site.urls)),
+    
+urlpatterns = patterns('',
+    url(r'^$', 'lists.views.home_page', name='home'),
+    url(r'^lists/(\d+)/$', 'lists.views.view_list', name='view_list'),
+    url(r'^lists/(\d+)/add_item$', 'lists.views.add_item', name='add_item'),
+    url(r'^lists/new$', 'lists.views.new_list', name='new_list'),
+    # url(r'^admin/', include(admin.site.urls)),
 )
