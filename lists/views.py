@@ -10,7 +10,7 @@ def home_page(request):
 		Item.objects.create(text=new_item_text) # this saves the item
 		return redirect('/lists/the-only-list-in-the-world/')
 
-	return render(request, 'home.html', {'items':items})
+	return render(request, 'home.html')
 
 def view_list(request):
 	items = Item.objects.all() # used so can be added to the return render
