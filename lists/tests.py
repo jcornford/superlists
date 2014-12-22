@@ -13,6 +13,54 @@ from lists.models import Item
 # $ python3 manage.py test 
 
 # these tests shoud be about testing logic, flow control, and configuration. Not really `HTML contstants...
+class NewListTest(TestCase):
+	def test_saving_a_POST_request(self):
+		
+		self.client.post(
+			'lists/new', # no trailing slash for some reason
+			data = {'item_text':'A new list item'}
+			)
+		self.assertEqual(Item.objects.count(),1)
+		new_item = Item.objects.first()
+		self.assertEqual(new_item.text, 'A new list item')
+
+		''' without using django tst client
+		# setup 
+		request = HttpRequest()
+		request.method = 'POST'
+		request.POST['item_text'] = 'A new list item'
+
+		# exercise 
+		response = home_page(request)
+
+		#assert
+		# to check that view saves a new item, not just passing it through to its response
+		self.assertEqual(Item.objects.count(),1)
+		new_item = Item.objects.first() # this is the same as objects.all()[0]
+		self.assertEqual(new_item.text,'A new list item')
+		'''
+	def test_redirects_after_POST_request(self):
+		self.client.post(
+			'lists/new',
+			data = {'item_text':'A new list item'}
+			)
+		self.assertEqual(response.status_code, 302, "check for redirection after POST failed: 302 is redirect status code") # reidrect has status code 302
+		self.assertEqual(response['location'],'/lists/the-only-list-in-the-world/')
+
+
+		''' without using django tst client
+		request = HttpRequest()
+		request.method = 'POST'
+		request.POST['item_text'] = 'A new list item'
+
+		response = home_page(request)
+
+		# check for redirection after first post request. 
+		self.assertEqual(response.status_code, 302, "check for redirection after POST failed: 302 is redirect status code") # reidrect has status code 302
+		self.assertEqual(response['location'],'/lists/the-only-list-in-the-world/')
+		'''
+
+
 
 class ListViewTest(TestCase):
 	def test_uses_list_template(self): # as opposed to home template we have been using till now
@@ -72,32 +120,7 @@ class HomePageTest(TestCase):
 		self.assertEqual(response.content.decode(), expected_html)
 		#use decode() to convert the respinse.content bytes int a python unicode string.
 
-	def test_home_page_can_save_a_POST_request(self):
-		# setup 
-		request = HttpRequest()
-		request.method = 'POST'
-		request.POST['item_text'] = 'A new list item'
-
-		# exercise 
-		response = home_page(request)
-
-		#assert
-		# to check that view saves a new item, not just passing it through to its response
-		self.assertEqual(Item.objects.count(),1)
-		new_item = Item.objects.first() # this is the same as objects.all()[0]
-		self.assertEqual(new_item.text,'A new list item')
-	def test_home_page_redirects_after_POST_request(self):
-
-		request = HttpRequest()
-		request.method = 'POST'
-		request.POST['item_text'] = 'A new list item'
-
-		response = home_page(request)
-
-		# check for redirection after first post request. 
-		self.assertEqual(response.status_code, 302, "check for redirection after POST failed: 302 is redirect status code") # reidrect has status code 302
-		self.assertEqual(response['location'],'/lists/the-only-list-in-the-world/')
-
+	
 		'''
 
 		self.assertIn('A new list item', response.content.decode())
