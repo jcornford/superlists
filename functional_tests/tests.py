@@ -1,3 +1,5 @@
+# Functional tests
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
 from django.test import LiveServerTestCase
@@ -36,6 +38,8 @@ class NewVisitorTest(LiveServerTestCase):
 
 		#she types buy slippers
 		inputbox.send_keys('Buy slippers')
+
+		#When she hits enter, she is taken to a new URL, and now page lists it.
    
 
 		#she hits enter, the page updates, and now page lists buy peakcock feathers
