@@ -5,14 +5,29 @@ from selenium.webdriver.common.keys import Keys
 from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-
+import sys
 
 #class NewVisitorTest(LiveServerTestCase):
 class NewVisitorTest(StaticLiveServerTestCase):
 
+	@classmethod
+	def setUpClass(cls): # pg.1
+		for arg in sys.argv:
+			if 'liveserver' in arg:
+				cls.server_url = 'http://'+arg.split('=')[1]
+				return
+		super().setUpClass()
+		cls.server_url = cls.live_server_url
+	@classmethod
+	def tearDownClass(cls):
+			if cls.server_url == cls.live_server_url:
+				super().tearDownClass()
+
+
 	def test_layout_and_styling(self):
 		#eidth goes to home page
-		self.browser.get(self.live_server_url)
+		#self.browser.get(self.live_server_url)
+		self.browser.get(self.server_url)
 		self.browser.set_window_size(1024,768)
 
 		# She notices the input box is nicely centered
@@ -34,6 +49,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 			)
 
 
+
 	def setUp(self):
 	    self.browser = webdriver.Firefox()
 	    self.browser.implicitly_wait(3) #to make sure selenium waits for pages to complete loading
@@ -51,18 +67,19 @@ class NewVisitorTest(StaticLiveServerTestCase):
 	def test_can_start_a_list_and_retrieve_it_later(self):
 		#User checks out the webpage
 		#self.browser.get('http://localhost:8000') # for use with import unittest and unittest.unitest? in the class that newvisitor inherits
-		self.browser.get(self.live_server_url)
+		#self.browser.get(self.live_server_url)
+		self.browser.get(self.server_url)
 
 		#user notices that page title AND header mention to-do lists
-		self.assertIn('To-Do',self.browser.title)
+		self.assertIn('To-do',self.browser.title)
 		header_text = self.browser.find_element_by_tag_name('h1').text
-		self.assertIn('To-Do',header_text)
+		self.assertIn('To-do',header_text)
 
 		#she is invited to enter a to-do item straight away
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		self.assertEqual(
 			inputbox.get_attribute('placeholder'),
-			'Enter a to-do item'
+			'Enter a new instruction for Jonny'
 			)
 
 		#she types buy slippers
@@ -91,7 +108,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		self.browser = webdriver.Firefox()
 
 		#user2 visits the homepage, no sign of ediths shit.
-		self.browser.get(self.live_server_url)
+		#self.browser.get(self.live_server_url)
+		self.browser.get(self.server_url)
 		page_text = self.browser.find_element_by_tag_name('body').text
 		self.assertNotIn('Buy slippers', page_text)
 		self.assertNotIn('Put on slippers', page_text)
@@ -100,7 +118,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		self.assertEqual(
 			inputbox.get_attribute('placeholder'),
-			'Enter a to-do item'
+			'Enter a new instruction for Jonny'
 			)
 		inputbox.send_keys('Take a shit')
 		inputbox.send_keys(Keys.ENTER)
