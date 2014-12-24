@@ -1,3 +1,24 @@
 #id_new_item {
 	margin-top:4ex;
 }
+
+.container{
+
+background-color: rgba(1,1,1,0);
+}
+.row{
+
+background-color: rgba(1,1,1,0);
+}
+.btn{
+background-color: rgba(1,1,1,0);
+border-top-color: rgba(1,1,1,0);
+}
+.jumbotron{
+	background-color: rgba(1,1,1,0);
+}
+
+//html {
+	//background-image: url('images/wallpaper.jpg');
+	//background-position: 100 Y;
+//}
